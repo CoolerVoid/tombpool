@@ -298,4 +298,3 @@ piscina_tarefa* piscina_fila_peek(piscina* dados)
 {
  return dados->TarefaFila->end;
 }
-
