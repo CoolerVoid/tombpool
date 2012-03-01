@@ -128,8 +128,7 @@ void poolWheel(piscina* dados)
 {
  do{
 //espera ateh que tenha trabalho na fila		
-  if(sem_wait(dados->TarefaFila->filaSemaforo)) 
-   DEBUG("Wait the semaphore");
+  sem_wait(dados->TarefaFila->filaSemaforo);
    
   if(segura)
   {			
@@ -198,9 +197,6 @@ void Cover_TombPool(piscina* dados,int NumThread)
   count++;
  }while(count<(dados->NumThread));
 
-// destroi o semaforo
- if(sem_destroy(dados->TarefaFila->filaSemaforo)!=0)
-  DEBUG("error in destroy semaphore\n");
 
  count=0;
 // acabamos e executamos
@@ -208,6 +204,11 @@ void Cover_TombPool(piscina* dados,int NumThread)
   pthread_join(dados->threads[count], NULL);
   count++;
  }while(count<(dados->NumThread));
+
+
+// destroi o semaforo
+ if(sem_destroy(dados->TarefaFila->filaSemaforo)!=0)
+  DEBUG("error in destroy semaphore\n");
 
 // liberamos a heap
  free(dados->threads);                                           
