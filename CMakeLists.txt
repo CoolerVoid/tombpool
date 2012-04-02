@@ -23,7 +23,7 @@ ADD_LIBRARY(tombpool SHARED ${tombpoolSources})
 SET_TARGET_PROPERTIES(tombpool PROPERTIES LINKER_LANGUAGE C)
 TARGET_LINK_LIBRARIES(tombpool pthread)
 
-ADD_LIBRARY(tombpool_static STATIC ${ColonySources})
+ADD_LIBRARY(tombpool_static STATIC ${tombpoolSources})
 SET_TARGET_PROPERTIES(tombpool_static PROPERTIES LINKER_LANGUAGE C)
 
 
