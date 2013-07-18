@@ -1,16 +1,22 @@
 ![Alt text](http://ertaislament.files.wordpress.com/2011/11/entomb.png)
 
-example how too use TombPool
- mkdir pack
- cmake ../; make; cd .. ; cp tombpool.h pack; cp test.c pack; cd pack
- sudo cp libtombpool.so /lib
- gcc -o test test.c -lpthread -ltombpool
- ./test
+#example how too use TombPool
 
-What this it ?
+ mkdir pack
+
+cmake ../; make; cd .. ; cp tombpool.h pack; cp test.c pack; cd pack
+
+sudo cp libtombpool.so /lib
+
+gcc -o test test.c -lpthread -ltombpool
+
+./test
+
+
+#What this it ?
 Just another thread pool simple api to work with double linked queue
 
-How too use ?
+#How too use ?
 look the comments in test.c
 
 Author:Antonio Costa aka " Cooler_ "
