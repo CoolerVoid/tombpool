@@ -19,10 +19,10 @@ Just another thread pool simple api to work with double linked queue
 #How too use ?
 look the comments in test.c
 
-Author:Antonio Costa aka " Cooler_ "
-contact: c00f3r[at]gmail[dot]com
-contribuitor: MarceloMF - Marcelo M. Fleury
-email: marcelo.fleury[at]4linux[dot]com[dot]br
+    Author:Antonio Costa aka " Cooler_ "
+    contact: c00f3r[at]gmail[dot]com
+    contribuitor: MarceloMF - Marcelo M. Fleury
+    email: marcelo.fleury[at]4linux[dot]com[dot]br
 
     Copyright (C) 2012 tombpool authors,
     
