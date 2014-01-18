@@ -133,6 +133,7 @@ void poolWheel(piscina* dados)
   if(segura)
   {			
 // passa tarefa para fila e executa
+// Hic Sunt Dracones
    void*(*func_buff)(void* arg);
    void* arg_buff;
 
