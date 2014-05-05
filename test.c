@@ -35,29 +35,31 @@ contact: c00f3r[at]gmail[dot]com
 #include <stdio.h>
 #include "tombpool.h"
 
-void tarefa(int a)
+void tarefa( int a )
 {
- fprintf(stdout,"%d\n", a);
+	
+	fprintf(stdout,"%d\n", a);
+	
 }
 
 
 int main()
 {
- int count=0;
+	int count = 0;
 // the pool struct	
- piscina* threadpool;
+	piscina* threadpool;
 // init pool, to fill the pool, alloc heap             
- threadpool=Dig_TombPool(4);       
+	threadpool = Dig_TombPool ( 4 );       
 
- while(count<10)
- {
+	while( count < 10 )
+	{
 // add task in pool and queue...
-  Add_Corpse(threadpool, (void*)tarefa, (void*)count);
-  count++;
- }	
+		Add_Corpse ( threadpool, (void*)tarefa, (void*)count );
+		count++;
+	}	
 
 // exec all and clear process
- Cover_TombPool(threadpool,10);
+	Cover_TombPool ( threadpool , 10 );
 	
- return 0;
+	return 0;
 }
