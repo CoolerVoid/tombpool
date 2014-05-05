@@ -41,20 +41,20 @@ typedef struct piscina_fila piscina_fila;
 typedef struct piscina piscina;
 typedef struct thread_datafala thread_datafala;
 
-void *xmalloc(unsigned int len);
+void *xmalloc ( unsigned int len );
 
 // to init api
-piscina* Dig_TombPool(int NumThread);
-void poolWheel(piscina* dados);
+piscina* Dig_TombPool ( int NumThread );
+void poolWheel ( piscina* dados );
 
 // to add task
-int Add_Corpse(piscina* dados, void *(*function_p)(void*), void* arg_p);
+int Add_Corpse (piscina* dados, void *(*function_p)(void*), void* arg_p );
 
 // to execute tasks and free heap...
-void Cover_TombPool(piscina* dados,int NumThead);
-int piscina_fila_init(piscina* dados);
-void piscina_fila_add(piscina* dados, piscina_tarefa* newjob_p);
-int piscina_fila_removelast(piscina* dados);
-piscina_tarefa* piscina_fila_peek(piscina* dados);
+void Cover_TombPool ( piscina* dados,int NumThead );
+int piscina_fila_init ( piscina* dados );
+void piscina_fila_add ( piscina* dados, piscina_tarefa* newjob_p );
+int piscina_fila_removelast ( piscina* dados );
+piscina_tarefa* piscina_fila_peek ( piscina* dados );
 
 #endif
