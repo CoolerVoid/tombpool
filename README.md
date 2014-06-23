@@ -1,16 +1,16 @@
 ![Alt text](http://ertaislament.files.wordpress.com/2011/11/entomb.png)
 
-#example how too use TombPool
+#example how too use TombPool 
 
- mkdir pack
+$ mkdir pack; cd pack
 
-cmake ../; make; cd .. ; cp tombpool.h pack; cp test.c pack; cd pack
+$ cmake ../; make; cd .. ; cp tombpool.h pack; cp test.c pack; cd pack
 
-sudo cp libtombpool.so /lib
+$ sudo cp libtombpool.so /lib
 
-gcc -o test test.c -lpthread -ltombpool
+$ gcc -o test test.c -lpthread -ltombpool
 
-./test
+$ ./test
 
 
 #What this it ?
