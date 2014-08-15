@@ -2,19 +2,11 @@
 
 #example how too use TombPool 
 
-$ mkdir pack; cd pack
-
-$ cmake ../; make; cd .. ; cp tombpool.h pack; cp test.c pack; cd pack
-
-$ sudo cp libtombpool.so /lib
-
-$ gcc -o test test.c -lpthread -ltombpool
-
-$ ./test
+$ sudo sh install.sh
 
 
 #What this it ?
-Just another thread pool simple api to work with double linked queue
+Just another thread pool simple library 
 
 #How too use ?
 look the comments in test.c
