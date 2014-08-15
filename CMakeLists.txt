@@ -15,6 +15,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+SET(CMAKE_C_FLAGS "-Ofast -fstack-protector-all")
+
 SET(tombpoolSources tombpool)
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 

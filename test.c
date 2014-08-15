@@ -60,6 +60,7 @@ int main()
 
 // exec all and clear process
 	Cover_TombPool ( threadpool , 10 );
-	
+
+	puts("test OK !");	
 	return 0;
 }

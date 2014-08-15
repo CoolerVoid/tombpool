@@ -31,11 +31,22 @@ email: marcelo.fleury[at]4linux[dot]com[dot]br
 #include <string.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <sys/resource.h>
 
 #include "tombpool.h"
 
-#define BUGVIEW 1
 
+void no_write_coredump (void) 
+{
+  struct rlimit rlim;
+   
+  rlim.rlim_cur = 0; 
+  rlim.rlim_max = 0; 
+  setrlimit(RLIMIT_CORE, &rlim);
+}
+
+
+#define BUGVIEW 1
 // to help debug 
 #define DEBUG(x, s...) do { \
  if (!BUGVIEW) { break; } \
@@ -96,23 +107,24 @@ void *xmalloc(unsigned int len)
 // enche a piscina kkkkk
 piscina *Dig_TombPool( int NumThread )
 {
+	no_write_coredump();
 	piscina* dados;
 	int count = 0;
 	
 	if( NumThread < 1 ) 
 		NumThread = 1;
 // usamos a heap para criar a pool
-	dados = (piscina*) xmalloc ( sizeof( piscina ) );                             
+	dados = xmalloc ( sizeof( piscina ) );                             
 
 // alocamos apra ID agora
-	dados->threads = (pthread_t*) xmalloc ( NumThread * sizeof(pthread_t) );      
+	dados->threads = xmalloc ( NumThread * sizeof(pthread_t) );      
 	dados->NumThread = NumThread;
 	
 // iniciamos tarefa de fila
 	piscina_fila_init( dados );
 	
 // alocamos para o semaforo
-	dados->TarefaFila->filaSemaforo = (sem_t*) xmalloc ( sizeof( sem_t ) );                 
+	dados->TarefaFila->filaSemaforo = xmalloc ( sizeof( sem_t ) );                 
 	sem_init( dados->TarefaFila->filaSemaforo , 0, 0 ); 
 	
 // damos create com pthread
@@ -159,7 +171,8 @@ void poolWheel( piscina* dados )
 			pthread_mutex_unlock( &morfo );                
 // roda a função			
 			func_buff( arg_buff );               			
-			free( job_p );   
+			free( job_p );  
+			job_p=NULL; 
 			segura--;                                                    
 		}
 		else
@@ -177,7 +190,7 @@ void poolWheel( piscina* dados )
 int Add_Corpse(piscina* dados, void *(*function_p)(void*), void* arg_p)
 {
 	piscina_tarefa* newJob;
-	newJob = (piscina_tarefa*) xmalloc( sizeof(piscina_tarefa) );                     
+	newJob = xmalloc( sizeof(piscina_tarefa) );                     
 	
 // adiciona a função e o argumento
 	newJob->function = function_p;
@@ -223,10 +236,14 @@ void Cover_TombPool ( piscina* dados, int NumThread)
 		DEBUG( "error in destroy semaphore\n" );
 
 // liberamos a heap
-	free( dados->threads );                                           
-	free( dados->TarefaFila->filaSemaforo );                                        
-	free( dados->TarefaFila );                                                  
-	free( dados );                                                            
+	free( dados->threads );
+	dados->threads=NULL;                                           
+	free( dados->TarefaFila->filaSemaforo );
+	dados->TarefaFila->filaSemaforo=NULL;                                        
+	free( dados->TarefaFila );           
+	dados->TarefaFila=NULL;                                       
+	free( dados );         
+	dados=NULL;                                                   
 }
 
 
@@ -234,7 +251,7 @@ void Cover_TombPool ( piscina* dados, int NumThread)
 int piscina_fila_init( piscina* dados)
 {
 	
-	dados->TarefaFila=(piscina_fila*) xmalloc( sizeof(piscina_fila) );      
+	dados->TarefaFila= xmalloc( sizeof(piscina_fila) );      
 	dados->TarefaFila->end = NULL;
 	dados->TarefaFila->start = NULL;
 	dados->TarefaFila->NumTarefa = 0;

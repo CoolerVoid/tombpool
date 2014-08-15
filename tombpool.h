@@ -31,6 +31,7 @@ email: marcelo.fleury@4linux.com.br
 
 #include <pthread.h>
 #include <semaphore.h>
+#include <sys/resource.h>
 
 struct piscina_tarefa;
 struct piscina_fila;
@@ -40,6 +41,10 @@ typedef struct piscina_tarefa piscina_tarefa;
 typedef struct piscina_fila piscina_fila;
 typedef struct piscina piscina;
 typedef struct thread_datafala thread_datafala;
+
+// to prevent to write core dump file
+void no_write_coredump (void);
+
 
 void *xmalloc ( unsigned int len );
 
