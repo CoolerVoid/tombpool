@@ -7,9 +7,9 @@ cmake ../; make; cd .. ; cp tombpool.h pack; cp test.c pack; cd pack
 cp libtombpool.so /lib
 echo "================================================"
 echo "Test programm at pack/test\n "
-echo " $ gcc -o test test.c -lpthread -ltombpool\n"
+echo " $ gcc -o test test.c -lpthread -ltombpool"
 echo "------------------------------------------------"
 gcc -o test test.c -lpthread -ltombpool
 ./test
-echo "look the file \"test.c\" to you know how to use this library...\n---"
+echo "look the file \"test.c\" to you know how to use this library..."
 
