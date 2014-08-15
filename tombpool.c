@@ -215,7 +215,7 @@ void Cover_TombPool ( piscina* dados, int NumThread)
 // threads atuais esperam o semaforo
 	do{
 		
-		if ( sem_post(dados->TarefaFila->filaSemaforo) )
+		if ( sem_post(dados->TarefaFila->filaSemaforo) != 0)
 			DEBUG ( "not bypass semafore wait,car crash xD!\n" );
 		count++;
 		
