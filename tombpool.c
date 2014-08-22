@@ -139,7 +139,7 @@ piscina *Dig_TombPool( int NumThread )
 
 		if(test)
 		{
-			DEBUG("Error \n",test);
+			DEBUG("Error \n");
 			th_error(test,"error here!");
 		}
 		count++;
