@@ -32,7 +32,7 @@ email: marcelo.fleury[at]4linux[dot]com[dot]br
 #include <pthread.h>
 #include <semaphore.h>
 #include <sys/resource.h>
-
+#include <errno.h>
 #include "tombpool.h"
 
 
@@ -57,6 +57,10 @@ void no_write_coredump (void)
  __LINE__, __FUNCTION__); \
  fprintf(stderr, x, ## s); \
 } while (0);
+
+#define th_error(en, msg) \
+               do { errno = en; perror(msg); exit(EXIT_FAILURE); } while (0)
+
 
 static int segura = 1;
 
@@ -109,7 +113,7 @@ piscina *Dig_TombPool( int NumThread )
 {
 	no_write_coredump();
 	piscina* dados;
-	int count = 0;
+	int count = 0,test=0;
 	
 	if( NumThread < 1 ) 
 		NumThread = 1;
@@ -131,7 +135,13 @@ piscina *Dig_TombPool( int NumThread )
 
 	do{
 		
-		pthread_create ( & ( dados->threads[count] ), NULL , (void *) poolWheel , (void *) dados ); 
+		test=pthread_create ( & ( dados->threads[count] ), NULL , (void *) poolWheel , (void *) dados ); 
+
+		if(test)
+		{
+			DEBUG("Error \n",test);
+			th_error(test,"error here!");
+		}
 		count++;
 		
 	}while( count < NumThread );
@@ -208,7 +218,7 @@ int Add_Corpse(piscina* dados, void *(*function_p)(void*), void* arg_p)
 // executa as thread e limpa tudo
 void Cover_TombPool ( piscina* dados, int NumThread)
 {
-	int count = 0;
+	int count = 0,test = 0;
 // acabar com thread que nao sai de loop
 	segura = NumThread; 
 
@@ -225,7 +235,12 @@ void Cover_TombPool ( piscina* dados, int NumThread)
  count=0;
 // acabamos e executamos
 	do{
-		pthread_join( dados->threads[count] , NULL );
+		test=pthread_join( dados->threads[count] , NULL );
+		if(test)
+		{
+			DEBUG("Error \n");
+			th_error(test," error here!");
+		}
 		count++;
 		
 	}while( count < (dados->NumThread) );
