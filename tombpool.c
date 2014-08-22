@@ -186,6 +186,7 @@ void poolWheel( piscina* dados )
 				free( job_p );  
 				job_p=NULL; 
 			}
+
 			segura--;                                                    
 		}
 		else
