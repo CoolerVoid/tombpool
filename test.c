@@ -33,11 +33,12 @@ contact: c00f3r[at]gmail[dot]com
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "tombpool.h"
 
 void tarefa( int a )
 {
-	
+        
 	fprintf(stdout,"%d\n", a);
 	
 }
@@ -49,9 +50,9 @@ int main()
 // the pool struct	
 	piscina* threadpool;
 // init pool, to fill the pool, alloc heap             
-	threadpool = Dig_TombPool ( 4 );       
+	threadpool = Dig_TombPool ( 10 );       
 
-	while( count < 10 )
+	while( count < 500 )
 	{
 // add task in pool and queue...
 		Add_Corpse ( threadpool, (void*)tarefa, (void*)count );

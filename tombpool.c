@@ -180,9 +180,12 @@ void poolWheel( piscina* dados )
 			piscina_fila_removelast( dados );
 			pthread_mutex_unlock( &morfo );                
 // roda a função			
-			func_buff( arg_buff );               			
-			free( job_p );  
-			job_p=NULL; 
+			func_buff( arg_buff );      
+         		if(job_p != NULL)
+			{		
+				free( job_p );  
+				job_p=NULL; 
+			}
 			segura--;                                                    
 		}
 		else
