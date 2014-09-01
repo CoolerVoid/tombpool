@@ -1,6 +1,6 @@
 ![Alt text](http://ertaislament.files.wordpress.com/2011/11/entomb.png)
 
-#example how too use TombPool 
+#example 
 
 $ sudo sh install.sh
 
