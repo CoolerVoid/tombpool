@@ -8,7 +8,7 @@ $ sudo sh install.sh
 #What this it ?
 Just another thread pool simple library 
 
-#How too use ?
+#How to use ?
 look the comments in test.c
 
     Author:Antonio Costa aka " Cooler_ "
