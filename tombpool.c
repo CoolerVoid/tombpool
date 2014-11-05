@@ -311,7 +311,7 @@ void piscina_fila_add( piscina* dados , piscina_tarefa* newjob_p)
 	sem_getvalue(dados->TarefaFila->filaSemaforo, &x);
 }
 
-
+//todo fix race condition here
 // remove tarefa da fila
 int piscina_fila_removelast( piscina* dados )
 {
