@@ -4,7 +4,7 @@ What this it ?
 Just another thread pool simple api to work with double linked queue
 
 Author:Antonio Costa aka " Cooler_ "
-contact: c00f3r[at]gmail[dot]com
+contact: coolerlair[at]gmail[dot]com
 contribuitor: MarceloMF - Marcelo M. Fleury
 email: marcelo.fleury@4linux.com.br
 
