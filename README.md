@@ -12,7 +12,7 @@ Just another thread pool simple library
 look the comments in test.c
 
     Author:Antonio Costa aka " Cooler_ "
-    contact: c00f3r[at]gmail[dot]com
+    contact: coolerlair[at]gmail[dot]com
     contribuitor: MarceloMF - Marcelo M. Fleury
     email: marcelo.fleury[at]4linux[dot]com[dot]br
 
