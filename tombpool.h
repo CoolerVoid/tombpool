@@ -32,6 +32,10 @@ email: marcelo.fleury@4linux.com.br
 #include <pthread.h>
 #include <semaphore.h>
 #include <sys/resource.h>
+#include <limits.h>
+#include <stdint.h>
+
+#define MUL_NO_OVERFLOW	((size_t)1 << (sizeof(size_t)*4))
 
 struct piscina_tarefa;
 struct piscina_fila;
@@ -46,7 +50,7 @@ typedef struct thread_datafala thread_datafala;
 void no_write_coredump (void);
 
 
-void *xmalloc ( unsigned int len );
+void *tombpool_xmalloc ( unsigned int len );
 
 // to init api
 piscina* Dig_TombPool ( int NumThread );
@@ -61,5 +65,6 @@ int piscina_fila_init ( piscina* dados );
 void piscina_fila_add ( piscina* dados, piscina_tarefa* newjob_p );
 int piscina_fila_removelast ( piscina* dados );
 piscina_tarefa* piscina_fila_peek ( piscina* dados );
+void *tombpool_xmallocarray (size_t nmemb, size_t size); 
 
 #endif

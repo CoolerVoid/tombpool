@@ -38,17 +38,17 @@ email: marcelo.fleury[at]4linux[dot]com[dot]br
 
 void no_write_coredump (void) 
 {
-  struct rlimit rlim;
+	struct rlimit rlim;
    
-  rlim.rlim_cur = 0; 
-  rlim.rlim_max = 0; 
-  setrlimit(RLIMIT_CORE, &rlim);
+	rlim.rlim_cur = 0; 
+  	rlim.rlim_max = 0; 
+  	setrlimit(RLIMIT_CORE, &rlim);
 }
 
 
 #define BUGVIEW 1
 // to help debug 
-#define DEBUG(x, s...) do { \
+#define TOMBPOOL_DEBUG(x, s...) do { \
  if (!BUGVIEW) { break; } \
  time_t t = time(NULL); \
  char *d = ctime(&t); \
@@ -96,17 +96,36 @@ typedef struct thread_data{
 }thread_data;
 
 
-// HEAP alignment :-X
-void *xmalloc(unsigned int len)
+
+// use HEAP 
+void *tombpool_xmalloc(unsigned int len)
 {
 	void *ptr;
 	
 	ptr = malloc ( len );
+
 	if ( ptr == NULL )
-		DEBUG("fail malloc");
+		TOMBPOOL_DEBUG("fail malloc");
 		
 	return ptr;
 }
+
+void *tombpool_xmallocarray (size_t nmemb, size_t size) 
+{
+	if ((nmemb >= MUL_NO_OVERFLOW || size >= MUL_NO_OVERFLOW) && nmemb > 0 && SIZE_MAX / nmemb < size) 
+	{
+		TOMBPOOL_DEBUG("integer overflow block");
+		return NULL;
+	}
+
+	void *ptr = malloc (nmemb*size);
+
+	if (ptr == NULL) 
+		return NULL;
+
+	return ptr;
+}
+
 
 // enche a piscina kkkkk
 piscina *Dig_TombPool( int NumThread )
@@ -118,17 +137,17 @@ piscina *Dig_TombPool( int NumThread )
 	if( NumThread < 1 ) 
 		NumThread = 1;
 // usamos a heap para criar a pool
-	dados = xmalloc ( sizeof( piscina ) );                             
+	dados = tombpool_xmalloc ( sizeof( piscina ) );                             
 
 // alocamos apra ID agora
-	dados->threads = xmalloc ( NumThread * sizeof(pthread_t) );      
+	dados->threads = tombpool_xmallocarray ( NumThread,sizeof(pthread_t) );      
 	dados->NumThread = NumThread;
 	
 // iniciamos tarefa de fila
 	piscina_fila_init( dados );
 	
 // alocamos para o semaforo
-	dados->TarefaFila->filaSemaforo = xmalloc ( sizeof( sem_t ) );                 
+	dados->TarefaFila->filaSemaforo = tombpool_xmalloc ( sizeof( sem_t ) );                 
 	sem_init( dados->TarefaFila->filaSemaforo , 0, 0 ); 
 	
 // damos create com pthread
@@ -139,7 +158,7 @@ piscina *Dig_TombPool( int NumThread )
 
 		if(test)
 		{
-			DEBUG("Error \n");
+			TOMBPOOL_DEBUG("Error \n");
 			th_error(test,"error here!");
 		}
 		count++;
@@ -204,7 +223,7 @@ void poolWheel( piscina* dados )
 int Add_Corpse(piscina* dados, void *(*function_p)(void*), void* arg_p)
 {
 	piscina_tarefa* newJob;
-	newJob = xmalloc( sizeof(piscina_tarefa) );                     
+	newJob = tombpool_xmalloc( sizeof(piscina_tarefa) );                     
 	
 // adiciona a função e o argumento
 	newJob->function = function_p;
@@ -230,7 +249,7 @@ void Cover_TombPool ( piscina* dados, int NumThread)
 	do{
 		
 		if ( sem_post(dados->TarefaFila->filaSemaforo) != 0)
-			DEBUG ( "not bypass semafore wait,car crash xD!\n" );
+			TOMBPOOL_DEBUG ( "not bypass semafore wait,car crash xD!\n" );
 		count++;
 		
 	}while (count < (dados->NumThread) );
@@ -242,7 +261,7 @@ void Cover_TombPool ( piscina* dados, int NumThread)
 		test=pthread_join( dados->threads[count] , NULL );
 		if(test)
 		{
-			DEBUG("Error \n");
+			TOMBPOOL_DEBUG("Error \n");
 			th_error(test," error here!");
 		}
 		count++;
@@ -252,7 +271,7 @@ void Cover_TombPool ( piscina* dados, int NumThread)
 
 // destroi o semaforo
 	if(sem_destroy( dados->TarefaFila->filaSemaforo ) != 0 )
-		DEBUG( "error in destroy semaphore\n" );
+		TOMBPOOL_DEBUG( "error in destroy semaphore\n" );
 
 // liberamos a heap
 	free( dados->threads );
@@ -270,7 +289,7 @@ void Cover_TombPool ( piscina* dados, int NumThread)
 int piscina_fila_init( piscina* dados)
 {
 	
-	dados->TarefaFila= xmalloc( sizeof(piscina_fila) );      
+	dados->TarefaFila= tombpool_xmalloc( sizeof(piscina_fila) );      
 	dados->TarefaFila->end = NULL;
 	dados->TarefaFila->start = NULL;
 	dados->TarefaFila->NumTarefa = 0;
