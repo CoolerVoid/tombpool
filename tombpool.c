@@ -339,19 +339,18 @@ int piscina_fila_removelast( piscina* dados )
 	oldLastJob = dados->TarefaFila->end;
 	int x = 0;
 	
-// ajustando tarefas
+	// ajustando tarefas
 	switch( dados->TarefaFila->NumTarefa )
 	{	
-// caso tenha alguma tarefa na fila	
+		// caso tenha alguma tarefa na fila	
 		case 0:     
 			return -1;
-			break;
-// se tem apenas uma tarefa na fila		
+		// se tem apenas uma tarefa na fila		
 		case 1:     
 			dados->TarefaFila->end = NULL;
 			dados->TarefaFila->start = NULL;
 			break;
-// caso tenha mais de uma tarefa na fila					
+		// caso tenha mais de uma tarefa na fila					
 		default:
 			oldLastJob->anterior->proximo = NULL;               
 			dados->TarefaFila->end = oldLastJob->anterior;
