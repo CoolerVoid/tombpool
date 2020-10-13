@@ -105,8 +105,11 @@ void *tombpool_xmalloc(unsigned int len)
 	ptr = malloc ( len );
 
 	if ( ptr == NULL )
+	{
 		TOMBPOOL_DEBUG("fail malloc");
-		
+		exit(0);
+	}	
+
 	return ptr;
 }
 
@@ -115,13 +118,16 @@ void *tombpool_xmallocarray (size_t nmemb, size_t size)
 	if ((nmemb >= MUL_NO_OVERFLOW || size >= MUL_NO_OVERFLOW) && nmemb > 0 && SIZE_MAX / nmemb < size) 
 	{
 		TOMBPOOL_DEBUG("integer overflow block");
-		return NULL;
+		exit(0);
 	}
 
 	void *ptr = malloc (nmemb*size);
 
-	if (ptr == NULL) 
-		return NULL;
+	if (ptr == NULL)
+	{
+		TOMBPOOL_DEBUG("Error in size %lu",size);
+		exit(0);
+	}	
 
 	return ptr;
 }
@@ -187,6 +193,7 @@ void poolWheel( piscina* dados )
 	
 			pthread_mutex_lock( &morfo );               			
 			job_p = piscina_fila_peek(dados);
+
 			if ( job_p == NULL )
 			{
 				piscina_fila_removelast( dados );
@@ -199,7 +206,8 @@ void poolWheel( piscina* dados )
 			piscina_fila_removelast( dados );
 			pthread_mutex_unlock( &morfo );                
 // roda a função			
-			func_buff( arg_buff );      
+			func_buff( arg_buff );    
+
          		if(job_p != NULL)
 			{		
 				free( job_p );  
@@ -255,7 +263,7 @@ void Cover_TombPool ( piscina* dados, int NumThread)
 	}while (count < (dados->NumThread) );
 
 
- count=0;
+	count=0;
 // acabamos e executamos
 	do{
 		test=pthread_join( dados->threads[count] , NULL );
@@ -365,6 +373,5 @@ int piscina_fila_removelast( piscina* dados )
 // pega primeiro elemento da fila
 piscina_tarefa* piscina_fila_peek(piscina* dados)
 {
-	
 	return dados->TarefaFila->end;
 }
